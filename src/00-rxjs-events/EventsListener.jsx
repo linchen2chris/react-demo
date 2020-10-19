@@ -1,67 +1,42 @@
 import "../App.css";
 
+import { Provider, connect } from "react-redux";
 import { Spin } from "antd";
-import { fromEvent } from "rxjs";
 import React from "react";
 
-import { LoadingOutlined } from "@ant-design/icons";
-
 import { MyTable } from "./MyTable";
-import { dispatch } from "./observers";
+import { generateEvent } from "./redux/generateEvent";
+import { metaData } from "./metaData";
 import MyBtn from "./MyBtn";
+import store from "./redux/store";
+
+const compMap = {
+  Spin: Spin,
+  MyBtn: MyBtn,
+  MyTable: MyTable,
+};
 
 function EventsListener() {
-  const [showSpinner, setShowSpinner] = React.useState(false);
-  const events = [
-    {
-      id: "openurl",
-      type: "click",
-      actions: [{ type: "openURL", data: { url: "http://www.baidu.com" } }],
-    },
-    {
-      id: "refresh",
-      type: "click",
-      actions: [{ type: "refresh", data: { target: 'table' } }],
-    },
-  ];
-
-  const dataSource = [
-    {
-      key: "1",
-      name: "胡彦斌",
-      age: 32,
-      address: "西湖区湖底公园1号",
-    },
-    {
-      key: "2",
-      name: "胡彦祖",
-      age: 42,
-      address: "西湖区湖底公园1号",
-    },
-  ];
-
-  React.useEffect(() => {
-    events.map((event) => {
-      fromEvent(document.getElementById(event.id), event.type).subscribe(
-        dispatch(event.actions)
-      );
-    });
-  }, [events, dispatch]);
-
-  const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
-
+  const data = metaData[1];
+  {
+    /* {metaData.map((data) => { */
+  }
+  /* const Comp = compMap[data.comp]; */
+  const WrapComp = connect(
+    (state) => state[data.id],
+    (dispatch) => generateEvent(dispatch, data.events)
+  )(MyBtn);
   return (
-    <Spin
-      id="spinner"
-      size={"large"}
-      indicator={antIcon}
-      spinning={showSpinner}
-      tip="Loading..."
-    >
-      <MyBtn id="openurl" label="openurl" />
-      <MyBtn id="refresh" label="refresh" />
-      <MyTable id="table" dataSource={dataSource}/>
-    </Spin>
+    <Provider store={store}>
+      {metaData.map((data) => {
+        const Comp = compMap[data.comp];
+        const WrapComp = connect(
+          (state) => state[data.id],
+          (dispatch) => generateEvent(dispatch, data.events)
+        )(Comp);
+        return <WrapComp />;
+      })}
+    </Provider>
   );
 }
 

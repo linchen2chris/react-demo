@@ -1,7 +1,7 @@
+import { filter } from 'rxjs/operators';
 import { from } from "rxjs";
-import { filter, map } from "rxjs/operators";
 
-export const dispatch = (actions, callbacks) => {
+export const Mydispatch = (actions, callbacks) => {
   return (e) => {
     from(actions)
       .pipe(
