@@ -6,25 +6,27 @@ export const dispatch = (actions, callbacks) => {
     from(actions)
       .pipe(
         filter((action) => action.type === "openURL"),
-        map((action) => action.data.url)
       )
       .subscribe(openURLObserver);
     from(actions)
-      .pipe(filter((action) => action.type === "submit"))
-      .subscribe(() => {
-        console.log("Line 41");
-      });
-    from(actions)
-      .pipe(filter((action) => action.type === "showSpinner"))
-      .subscribe(() => {
-        callbacks.setShowSpinner(true);
-      });
+      .pipe(filter((action) => action.type === "refresh"))
+      .subscribe(refreshObserver);
   };
 };
 
-
 const openURLObserver = {
-	next: (url) => window.open(url),
-	error: err => console.error('open url failed', err),
-	complete: () => console.log('open url done'),
+  next: (action) => {
+    console.log("Line 28", action);
+    window.open(action.url);
+  },
+  error: (err) => console.error("open url failed", err),
+  complete: () => console.log("111"),
+};
+
+const refreshObserver = {
+  next: (action) => {
+		console.log("Line 29", action.data.target);
+  },
+  error: (err) => console.log("Line 43 refresh failed"),
+  complete: () => console.log("Line 44", "done"),
 };
