@@ -1,10 +1,11 @@
-import { Button, Checkbox, Input } from "antd";
+import { Button } from "antd";
 import React from "react";
 import { FieldArray, Field, useField, useFormikContext } from "formik";
+import { Checkbox, Input } from "formik-antd";
 
 const OptionsConfig = ({ name }) => {
   const { values, submitForm, setFieldValue } = useFormikContext();
-//  console.log("Line 7", values, values[name]); TODO rerender 4 times
+   console.log("Line 7", values, values[name]); //TODO rerender 4 times
   return (
     <FieldArray
       name={name}
@@ -14,21 +15,7 @@ const OptionsConfig = ({ name }) => {
             {values.optionsConfig.options.map((o, index) => (
               <div style={{ display: "flex" }}>
                 {/* <Field name={`[${index}].label`} /> */}
-                <Field name={`optionsConfig.options[${index}].checked`}>
-                  {({ field, form }) => {
-                    return (
-                      <Checkbox
-                        checked={field.value}
-                        onChange={(e) =>
-                          form.setFieldValue(
-                            `optionsConfig.options[${index}].checked`,
-                            e.target.checked
-                          )
-                        }
-                      />
-                    );
-                  }}
-                </Field>
+                <Checkbox name={`optionsConfig.options[${index}].checked`} />
 
                 <Button
                   onClick={() => {
@@ -46,23 +33,15 @@ const OptionsConfig = ({ name }) => {
                 >
                   删除
                 </Button>
-                <Field name={`optionsConfig.options[${index}].value`}>
-                  {({ field, form }) => (
-                    <Input
-                      value={field.value}
-                      onChange={(e) => {
-                        form.setFieldValue(
-                          `optionsConfig.options[${index}].label`,
-                          e.target.value
-                        );
-                        form.setFieldValue(
-                          `optionsConfig.options[${index}].value`,
-                          e.target.value
-                        );
-                      }}
-                    />
-                  )}
-                </Field>
+                <Input
+                  name={`optionsConfig.options[${index}].value`}
+                  onChange={(e) => {
+                    setFieldValue(
+                      `optionsConfig.options[${index}].label`,
+                      e.target.value
+                    );
+                  }}
+                />
               </div>
             ))}
             <Button
