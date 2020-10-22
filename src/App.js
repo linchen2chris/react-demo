@@ -1,3 +1,5 @@
+import 'antd/dist/antd.css';
+
 import "./App.css";
 
 import {
@@ -8,8 +10,9 @@ import {
 } from "react-router-dom";
 import React from "react";
 
+import AntdForm from './01-react-hook-form-antd/AntdForm';
 import EventsListener from './00-rxjs-events/EventsListener';
-import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
+import RHFForm from './01-react-hook-form-antd/RHFForm';
 
 function App() {
   return <Router>
@@ -23,7 +26,7 @@ function App() {
             <Link to="/events">事件触发器调研</Link>
           </li>
           <li>
-            <Link to="/users">Users</Link>
+            <Link to="/rhf-form">RHF form</Link>
           </li>
         </ul>
       </nav>
@@ -34,6 +37,8 @@ function App() {
         <Route path="/events">
           <EventsListener />
         </Route>
+        <Route path="/rhf-form"><RHFForm/></Route>
+        <Route path="/ant-form"><AntdForm/></Route>
       </Switch>
     </div>
   </Router>
