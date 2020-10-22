@@ -12,6 +12,7 @@ import React from "react";
 
 import AntdForm from './01-react-hook-form-antd/AntdForm';
 import EventsListener from './00-rxjs-events/EventsListener';
+import FormikForm from './02-formik-antd/FormikForm';
 import RHFForm from './01-react-hook-form-antd/RHFForm';
 
 function App() {
@@ -39,6 +40,7 @@ function App() {
         </Route>
         <Route path="/rhf-form"><RHFForm/></Route>
         <Route path="/ant-form"><AntdForm/></Route>
+        <Route path="/formik-form"><FormikForm/></Route>
       </Switch>
     </div>
   </Router>
