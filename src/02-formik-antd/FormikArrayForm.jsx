@@ -17,13 +17,7 @@ export const FormikArrayForm = () => (
 );
 
 export const FriendForm = ({
-  move,
-  swap,
-  push,
-  insert,
-  unshift,
   replace,
-  pop,
   form,
   remove,
 }) => {
@@ -71,10 +65,11 @@ export const FriendForm = ({
 
 export default FormikArrayForm;
 
-const ModalForm = ({ modal, setModal, replace, initialValues }) => {
+const ModalForm = ({ modal, setModal, replace, initialValues = { name: "", age: "" }}) => {
+  console.log("Line 69", initialValues, modal);
   return (
     <Formik
-      initialValues={initialValues || { name: "", age: "" }}
+      initialValues={initialValues}
       enableReinitialize // very important
       onSubmit={(values) => {
         replace(modal.index, values);
@@ -88,10 +83,9 @@ const ModalForm = ({ modal, setModal, replace, initialValues }) => {
             visible={modal.show}
             onCancel={() => {
               setModal({ show: false });
-              /* props.resetForm(); */
+              props.resetForm();
             }}
             onOk={props.handleSubmit}
-            okButtonProps={{ htmlType: "submit" }}
           >
             <Input name={`name`} />
             <InputNumber name={`age`} />
