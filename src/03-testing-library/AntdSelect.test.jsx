@@ -1,51 +1,54 @@
 import "@testing-library/jest-dom/extend-expect";
 
-import { act, render, fireEvent } from "@testing-library/react";
+import { act, wait, render, fireEvent } from "@testing-library/react";
 import React from "react";
-import userEvent from '@testing-library/user-event';
 
-
-import {screen} from '@testing-library/dom';
+import userEvent from "@testing-library/user-event";
 
 import App from "./AntdSelect";
 
 describe("AntdSelect", () => {
   it("should select options correctly", async () => {
     const changeSpy = jest.fn();
-    const { queryAllByText, getByText,getByRole,  getByTestId, container } = render(
+    const { queryAllByTestId, getByRole, getByTestId } = render(
       <App onChange={changeSpy} />
     );
 
-    expect(queryAllByText("Jack").length).toBe(0);
-    expect(queryAllByText("Lucy").length).toBe(0);
-    const select = container.querySelector(".ant-select-selector");
-    const selector = getByRole('combobox');
+    expect(queryAllByTestId("Jack").length).toBe(0);
+    expect(queryAllByTestId("Lucy").length).toBe(0);
     await act(async () => {
-      await fireEvent.click(select);
+      await fireEvent.mouseDown(getByRole("combobox", { name: "select" }));
     });
-    screen.debug();
-    expect(queryAllByText("Jack").length).toBe(1);
-    expect(queryAllByText("Lucy").length).toBe(1);
-    // act(() => {
-    //   fireEvent.mouseDown(getByText("Jack"));
-    // });
-    expect(queryAllByText("Jack").length).toBe(1);
-    expect(queryAllByText("Lucy").length).toBe(1);
-    expect(changeSpy).toHaveBeenCalled();
+    await act(async () => {
+      await fireEvent.click(getByTestId("Jack"));
+    });
+
+    expect(changeSpy).toHaveBeenCalledWith("Jack", expect.anything());
+    expect(getByTestId("Jack")).toBeInTheDocument();
+    expect(getByTestId("Lucy")).toBeInTheDocument();
   });
 
-  it("should select for userEvent", () => {
+  it("should select for userEvent", async () => {
     const changeSpy = jest.fn();
-    const { queryAllByText, getByText,getByRole,  getByTestId, container } = render(
+    const { getByRole, getByTestId, queryByTestId } = render(
       <App onChange={changeSpy} />
     );
 
-    expect(queryAllByText("Jack").length).toBe(0);
-    expect(queryAllByText("Lucy").length).toBe(0);
-    const select = container.querySelector(".ant-select-selector");
-    const selector = getByRole('combobox');
+    expect(queryByTestId("Jack")).not.toBeInTheDocument();
+    expect(queryByTestId("Lucy")).not.toBeInTheDocument();
+    const selector = getByRole("combobox");
 
-    userEvent.select(select, 'jack');
-    expect(changeSpy).toHaveBeenCalled();
+    await act(async () => {
+      // selectOption only open dropdown can not select.
+      await userEvent.selectOptions(selector, ["Jack"]);
+    });
+
+    await act(async () => {
+      await fireEvent.click(getByTestId("Jack"));
+    });
+    expect(changeSpy).toHaveBeenCalledWith("Jack", expect.anything());
+
+    expect(getByTestId("Jack")).toBeInTheDocument();
+    expect(getByTestId("Lucy")).toBeInTheDocument();
   });
 });

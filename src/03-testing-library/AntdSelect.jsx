@@ -1,15 +1,17 @@
+import { Input, Select } from "antd";
 import React from "react";
-import { Select } from "antd";
 
 const { Option } = Select;
 
-
-export default function App({onChange}) {
+export default function AntSelect({ onChange }) {
   return (
-    <Select data-testid="select" tyle={{ width: 120 }} onChange={onChange}>
-      <Option value="lucy">Lucy</Option>
-      <Option value="Yiminghe">yiminghe</Option>
-      <Option value="jack">Jack</Option>
+    <Select aria-label="select" style={{ width: 120 }} onChange={onChange}>
+      <Option title="Lucy" data-testid="Lucy" value="Lucy">
+        Lucy
+      </Option>
+      <Option title="Jack" data-testid="Jack" value="Jack">
+        Jack
+      </Option>
     </Select>
   );
 }
