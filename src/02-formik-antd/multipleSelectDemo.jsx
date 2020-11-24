@@ -25,15 +25,16 @@ const CheckboxExample = () => (
         console.log("Line 24", values);
       }}
     >
-      {({
-        isSubmitting,
-        getFieldProps,
-        handleChange,
-        handleBlur,
-        values,
-        errors,
-        touched,
-      }) => {
+      {(props) => {
+        const {
+          isSubmitting,
+          getFieldProps,
+          handleChange,
+          handleBlur,
+          values,
+          errors,
+          touched,
+        } = props;
         console.log("Line 36", values, errors, touched);
         return (
           <Form>
