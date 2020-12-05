@@ -5,13 +5,14 @@ import "./App.css";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import React from "react";
 
+import { Hooks } from './07-hooks/Hooks';
+import AntSelect from "./03-testing-library/AntdSelect";
 import AntdForm from "./01-react-hook-form-antd/AntdForm";
 import CheckboxExample from "./02-formik-antd/multipleSelectDemo";
 import EventsForm from "./04-formik-array-modal/EventsForm";
 import EventsListener from "./00-rxjs-events/EventsListener";
 import FormikForm from "./02-formik-antd/FormikForm";
 import RHFForm from "./01-react-hook-form-antd/RHFForm";
-import AntSelect from "./03-testing-library/AntdSelect";
 
 function App() {
   return (
@@ -56,6 +57,9 @@ function App() {
           </Route>
           <Route path="/select">
             <AntSelect onChange={console.log} />
+          </Route>
+          <Route path="/hooks">
+            <Hooks />
           </Route>
         </Switch>
       </div>
