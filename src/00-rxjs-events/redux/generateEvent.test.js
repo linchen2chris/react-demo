@@ -7,7 +7,7 @@ describe("generateEvent", () => {
       type: "onClick",
       actions: [{ type: "openURL", data: { url: "http://www.baidu.com" } }],
     };
-    expect(generateEvent(event)).toEqual({
+    expect(generateEvent(store.dispatch, [ event ])).toEqual({
       onClick: () => {
         event.actions.map((action) => store.dispatch(action));
       },

@@ -4,4 +4,6 @@ describe("mockWindow", () => {
 		window.open('http://www.baidu.com');
 		expect(global.open).toBeCalledWith('http://www.baidu.com');
   });
+  
 });
+

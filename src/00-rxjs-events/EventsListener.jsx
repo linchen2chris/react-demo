@@ -1,14 +1,14 @@
 import "../App.css";
 
-import { Provider, connect } from "react-redux";
 import { Spin } from "antd";
-import React from "react";
+import React, {useReducer} from "react";
 
 import { MyTable } from "./MyTable";
+import { dataSource } from './redux/store';
 import { generateEvent } from "./redux/generateEvent";
+import { generateInitState } from './redux/generateReducers';
 import { metaData } from "./metaData";
-import MyBtn from "./MyBtn";
-import store from "./redux/store";
+import MyBtn from './MyBtn';
 
 const compMap = {
   Spin: Spin,
@@ -17,26 +17,31 @@ const compMap = {
 };
 
 function EventsListener() {
-  const data = metaData[1];
-  {
-    /* {metaData.map((data) => { */
-  }
-  /* const Comp = compMap[data.comp]; */
-  const WrapComp = connect(
-    (state) => state[data.id],
-    (dispatch) => generateEvent(dispatch, data.events)
-  )(MyBtn);
+  const initState= generateInitState(metaData);
+  console.log("Line 22", initState);
+  const [state, dispatch] = useReducer((state, action) => {
+    switch (action.type) {
+      case "openURL":
+        window.open(action.data.url);
+      case "refresh":
+        return {
+          ...state,
+          [action.data.target]: { ...state[action.data.target], dataSource },
+        };
+      default:
+        return state;
+    }
+  }, initState);
   return (
-    <Provider store={store}>
+    // <Provider store={store}>
+    <>
       {metaData.map((data) => {
         const Comp = compMap[data.comp];
-        const WrapComp = connect(
-          (state) => state[data.id],
-          (dispatch) => generateEvent(dispatch, data.events)
-        )(Comp);
-        return <WrapComp />;
+        console.log("Line 41", Comp, state[data.id]);
+        return <Comp {...state[data.id]} {...generateEvent(dispatch, data.events)}/>;
       })}
-    </Provider>
+    </>
+    // </Provider>
   );
 }
 

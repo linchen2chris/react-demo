@@ -1,5 +1,3 @@
-import store from "./store";
-
 export const generateEvent = (dispatch, events) => {
   let result = {};
   if (events) {

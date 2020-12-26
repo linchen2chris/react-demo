@@ -5,7 +5,7 @@ import { generateInitState } from './generateReducers';
 import { metaData } from '../metaData';
 
 const middleware = [thunk];
-const dataSource = [
+export const dataSource = [
   {
     key: "1",
     name: "胡彦斌",

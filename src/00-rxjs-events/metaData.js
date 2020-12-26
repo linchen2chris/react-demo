@@ -1,10 +1,5 @@
 export const metaData = [
   {
-    id: "spinner",
-    comp: "Spin",
-    data: { size: "large",  spinning: false, tip: "Loading" },
-  },
-  {
     id: "openurl",
     comp: "MyBtn",
     data: { label: "openurl" },
