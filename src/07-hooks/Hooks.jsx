@@ -30,8 +30,32 @@ const Demo = () => {
 };
 export const Hooks = () => {
   const { open, toggle } = useToggle();
+  const [state, dispatch] = React.useReducer(
+    (state, action) => {
+      switch (action.type) {
+        case "getData":
+          return { ...state, data: action.data };
+        default:
+          return state;
+      }
+    },
+    { data: 2 }
+  );
+  const wrapDispatch = (dispatch) => {
+    return (action) => {
+      if (action instanceof Promise) {
+        return action.then(dispatch);
+      }
+      if (typeof action === 'function') {
+        return action(wrapDispatch(dispatch));
+      }
+      return dispatch(action);
+    };
+  };
 
-  const { MyModal, toggleModal } = useModal({ title: "Test hookModal" });
+	const asyncDispatch = wrapDispatch(dispatch);
+
+	const { MyModal, toggleModal } = useModal({ title: "Test hookModal" });
   return (
     <div>
       <p>{open ? "on" : "off"}</p>
@@ -40,6 +64,14 @@ export const Hooks = () => {
       <MyModal>hello</MyModal>
       <button onClick={toggleModal}>show modal</button>
       <Demo />
+
+      <h1>{state.data}</h1>
+      <button onClick={() => asyncDispatch((dispatch) => new Promise(resolve => resolve(9)).then(res => dispatch({type: 'getData', data: res}, res)))}>
+        refresh1
+      </button>
+      <button onClick={() => asyncDispatch(new Promise((resolve, reject) => resolve({ type: "getData", data: 4 })))}>
+        refresh
+      </button>
     </div>
   );
 };

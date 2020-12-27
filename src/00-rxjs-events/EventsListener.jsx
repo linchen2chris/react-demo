@@ -33,7 +33,6 @@ function EventsListener() {
     }
   }, initState);
   return (
-    // <Provider store={store}>
     <>
       {metaData.map((data) => {
         const Comp = compMap[data.comp];
@@ -41,7 +40,6 @@ function EventsListener() {
         return <Comp {...state[data.id]} {...generateEvent(dispatch, data.events)}/>;
       })}
     </>
-    // </Provider>
   );
 }
 
